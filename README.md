@@ -31,3 +31,15 @@ The cmd for this task e.g.:
 ```cmd
 python cluster.py --customer_csv_path ../data/csv/customers.csv --vector_path ../data/customer_cluster/customer_vectors.npy --customer_id_path ../data/customer_cluster/customer_ids.txt  --aug_customer_csv_path ../data/csv/aug_customers.csv --output_model_path ../models/kmeans.pkl --k 6 --batch_size 1024
 ```
+
+# LoRA
+
+- Build train pipeline including dataset loading & preprocessing, train model defining (with LoRA using PEFT) and evaluation
+- A Jupyter Notebook for inference testing
+
+The cmd for this task e.g.:
+
+```
+python train.py --comment_path ../data/csv/comments.csv --output_dir ../models/amz_movie_tv_dis
+tilgpt2_
+```
