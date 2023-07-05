@@ -60,7 +60,7 @@ def main():
 
     print('CSV read & sorted')
 
-    lastCustomerId = ''
+    lastCustomerId = comment_df.iloc[0]['customerId']
     lastCustomerReview = ''
     # handles for customer cluster related files
     customer_vectors_file = open(customer_vectors_path, 'wb')
@@ -83,11 +83,11 @@ def main():
                         doc_vector = cal_doc_vector(doc)
                         np.save(customer_vectors_file, np.array(doc_vector.get() if spacy.prefer_gpu() else doc_vector))
                     customer_batch = []
-                customer_ids_file.write(f'{customerId}\n')
-                lastCustomerId = customerId
+                customer_ids_file.write(f'{lastCustomerId}\n')
                 lastCustomerReview = ''
             # append review for the same customer
             lastCustomerReview += review + '. '
+            lastCustomerId = customerId
             # calculate in batch
             comment_batch.append(review.lower()[:min(args.max_text_length, len(review))])
             if len(comment_batch) == args.batch_size:
@@ -104,7 +104,7 @@ def main():
 
     # calculate last customer's review vector
     customer_batch.append(lastCustomerReview[:min(args.max_text_length, len(lastCustomerReview))])
-    customer_ids_file.write(f'{customerId}\n')
+    customer_ids_file.write(f'{lastCustomerId}\n')
     for doc in nlp.pipe(customer_batch, disable=['tagger', 'spacytextblob']):
         doc_vector = cal_doc_vector(doc)
         np.save(customer_vectors_file, np.array(doc_vector.get() if spacy.prefer_gpu() else doc_vector))
