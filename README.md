@@ -7,14 +7,27 @@ Data &amp; ML code base from HSBC quiz
 - Convert JSON data to 3 csv files (products, customers & comments)
 - Further understand & experiment on the data using Pandas, SpaCy, sklearn, etc., mainly on a subset
 - Augment comment data with semantic analysis & word count
-- Augment customer data with clustering on comments
 - Key word detection on comment data, to form word cloud
 
 The pipeline for the data preprocessing phase will be e.g.:
 
-```
+```cmd
 // convert json to csv
 python convert_json_to_csv.py --json_dir ../data/original --csv_dir ../data/csv
 // spacy functions, incl. semantic anaylysis, word count & tokenization
 python process_with_spacy.py --comment_path ../data/csv/comments.csv --customer_cluster_base ../data/customer_cluster --aug_comment_path ../data/csv/aug_comments.csv --keyword_path ../data/csv/keywords.csv --batch_size 1000
+```
+
+## Clustering on Customer Comments
+
+- Gather all comments on each customer, and calculate their vector representation (done in data preprocess with spacy)
+- Use MiniBatchKMeans to cluster, with elbow method to select an appropriate K
+- Understand the data in Jupyter Notebook, with visualization & selected comments based on the cluster, on a subset of data
+- Augment customer data with cluster id (based on all their comments), distance to cluster center and 2d decomposition (for visualization)
+- Save the clustering model with Joblib
+
+The cmd for this task e.g.:
+
+```cmd
+python cluster.py --customer_csv_path ../data/csv/customers.csv --vector_path ../data/customer_cluster/customer_vectors.npy --customer_id_path ../data/customer_cluster/customer_ids.txt  --aug_customer_csv_path ../data/csv/aug_customers.csv --output_model_path ../models/kmeans.pkl --k 6 --batch_size 1024
 ```
