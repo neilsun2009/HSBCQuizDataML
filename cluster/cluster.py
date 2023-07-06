@@ -11,7 +11,7 @@ import joblib
 # steps
 # perform clustering
 # record cluster id, distance to center, 2d representation of each customer
-# save the clustering model
+# save the clustering and pca model
 
 RANDOM_STATE = 16
 
@@ -23,9 +23,12 @@ def main():
     parser.add_argument('--k', type=int, default=6, help='number of clusters')
     parser.add_argument('--batch_size', type=int, default=1024, help='batch size for cluster methods')
     parser.add_argument('--aug_customer_csv_path', type=str, required=True, help='output csv file for augmented info on customers')
-    parser.add_argument('--output_model_path', type=str, required=True, help='output path for kmeans model')
+    parser.add_argument('--output_model_dir', type=str, required=True, help='output dir for kmeans & pca models')
     parser.add_argument('--max_data_lines', type=int, default=-1, help='max amount of data lines to be handled')
     args = parser.parse_args()
+
+    output_kmeans_path = os.path.join(args.output_model_dir, 'kmeans.pkl')
+    output_pca_path = os.path.join(args.output_model_dir, 'pca.pkl')
     
     print('Loading vector file...')
     vector_data = []
@@ -85,7 +88,8 @@ def main():
 
     print('Wrting output...')
     customer_df.to_csv(args.aug_customer_csv_path, index=False)
-    joblib.dump(kmeans, args.output_model_path)
+    joblib.dump(kmeans, output_kmeans_path)
+    joblib.dump(pca, output_pca_path)
 
 
 if __name__ == '__main__':

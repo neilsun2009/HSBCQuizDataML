@@ -24,12 +24,12 @@ python process_with_spacy.py --comment_path ../data/csv/comments.csv --customer_
 - Use MiniBatchKMeans to cluster, with elbow method to select an appropriate K
 - Understand the data in Jupyter Notebook, with visualization & selected comments based on the cluster, on a subset of data
 - Augment customer data with cluster id (based on all their comments), distance to cluster center and 2d decomposition (for visualization)
-- Save the clustering model with Joblib
+- Save the clustering model & pca model with Joblib
 
 The cmd for this task e.g.:
 
 ```cmd
-python cluster.py --customer_csv_path ../data/csv/customers.csv --vector_path ../data/customer_cluster/customer_vectors.npy --customer_id_path ../data/customer_cluster/customer_ids.txt  --aug_customer_csv_path ../data/csv/aug_customers.csv --output_model_path ../models/kmeans.pkl --k 6 --batch_size 1024
+python cluster.py --customer_csv_path ../data/csv/customers.csv --vector_path ../data/customer_cluster/customer_vectors.npy --customer_id_path ../data/customer_cluster/customer_ids.txt  --aug_customer_csv_path ../data/csv/aug_customers.csv --output_model_dir ../models/cluster/ --k 6 --batch_size 1024
 ```
 
 # LoRA
