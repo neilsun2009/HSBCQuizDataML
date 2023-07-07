@@ -10,7 +10,8 @@ from transformers import (
 )
 from peft import LoraConfig, TaskType, get_peft_model
 
-BLOCK_SIZE = 128
+BLOCK_SIZE = 256
+RANDOM_STATE = 16
 
 tokenizer = AutoTokenizer.from_pretrained("distilgpt2")
 
@@ -38,12 +39,34 @@ def main():
     parser.add_argument('--comment_path', type=str, required=True, help='input csv file path for all comments')
     parser.add_argument('--output_dir', type=str, required=True, help='output dir for model')
     parser.add_argument('--lr', type=float, default=2e-5, help='learning rate')
+    parser.add_argument('--sample_method', choices=['longest', 'random'], default='random', help='method of sampling data')
     parser.add_argument('--max_line_number', type=int, default=-1, help='max line number to load')
     args = parser.parse_args()
 
     # prepare dataset
-    comment_df = pd.read_csv(args.comment_path, nrows=None if args.max_line_number == -1 else args.max_line_number)
+    # comment_df = pd.read_csv(args.comment_path, nrows=None if args.max_line_number == -1 else args.max_line_number)
+    comment_df = pd.read_csv(args.comment_path)
+    
     comment_df = comment_df[['review']]
+    comment_df.dropna(inplace=True)
+    
+    # sort using length
+    if args.sample_method == 'longest':
+        sorted_index = comment_df.review.str.len().sort_values().index
+        comment_df = comment_df.reindex(sorted_index[::-1])
+        comment_df = comment_df[:args.max_line_number]
+    elif args.sample_method == 'random':
+        comment_df = comment_df.sample(
+            n=args.max_line_number,
+            random_state=RANDOM_STATE,
+        )
+    else:
+        raise ValueError(f'unsupported sample method {args.sample_method}')
+
+    print(len(comment_df))
+
+    print(comment_df)
+
     ds = Dataset.from_pandas(comment_df)
     ds = ds.train_test_split(test_size=0.2)
 

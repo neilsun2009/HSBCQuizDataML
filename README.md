@@ -40,6 +40,5 @@ python cluster.py --customer_csv_path ../data/csv/customers.csv --vector_path ..
 The cmd for this task e.g.:
 
 ```
-python train.py --comment_path ../data/csv/comments.csv --output_dir ../models/amz_movie_tv_dis
-tilgpt2_
+python train.py --comment_path ../data/csv/aug_comments.csv --output_dir ../models/amz_movie_tv_distilgpt2_50k_longest --sample_method longest --max_line_number 50000
 ```
