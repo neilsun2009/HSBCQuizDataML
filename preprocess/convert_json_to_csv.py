@@ -105,7 +105,7 @@ def main():
                     continue
                 # remove null review
                 review = ori_comment.get('reviewText', '')
-                if review == '':
+                if (not review) or review == '':
                     continue
                 comment_writer.writerow({
                     'overall': ori_comment['overall'],
