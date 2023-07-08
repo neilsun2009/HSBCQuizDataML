@@ -4,6 +4,13 @@ import csv
 import json
 import os
 import re
+from bs4 import BeautifulSoup
+
+# Define a function to remove HTML tags from a string
+def remove_html_tags(text):
+    soup = BeautifulSoup(text, "html.parser")
+    stripped = soup.get_text(separator=" ")
+    return stripped
 
 def main():
     parser = argparse.ArgumentParser()
@@ -107,12 +114,15 @@ def main():
                 review = ori_comment.get('reviewText', '')
                 if (not review) or review == '':
                     continue
+                # filter out newline & html tags in review
+                review = remove_html_tags(review)
+                review = review.replace('\n', '. ')
                 comment_writer.writerow({
                     'overall': ori_comment['overall'],
                     'asin': ori_comment['asin'],
                     'customerId': ori_comment['reviewerID'],
                     'summary': ori_comment.get('summary', ''),
-                    'review': review.replace('\n', '. '),
+                    'review': review,
                     'timestamp': ori_comment['unixReviewTime'],
                 })
                 if not customer_id in customer_ids:

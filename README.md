@@ -8,6 +8,7 @@ Data &amp; ML code base from HSBC quiz
 - Further understand & experiment on the data using Pandas, SpaCy, sklearn, etc., mainly on a subset
 - Augment comment data with semantic analysis & word count
 - Key word detection on comment data, to form word cloud
+- Augment product data with review count, avg rating, avg sentiment & avg conbined rating
 
 The pipeline for the data preprocessing phase will be e.g.:
 
@@ -16,6 +17,8 @@ The pipeline for the data preprocessing phase will be e.g.:
 python convert_json_to_csv.py --json_dir ../data/original --csv_dir ../data/csv
 // spacy functions, incl. semantic anaylysis, word count & tokenization
 python process_with_spacy.py --comment_path ../data/csv/comments.csv --customer_cluster_base ../data/customer_cluster --aug_comment_path ../data/csv/aug_comments.csv --keyword_path ../data/csv/keywords.csv --batch_size 1000
+// augment products with comment info
+python augment_products.py --comment_csv_path ../data/csv/aug_comments.csv --product_csv_path ../data/csv/products.csv --aug_product_csv_path ../data/csv/aug_products.csv
 ```
 
 ## Clustering on Customer Comments
