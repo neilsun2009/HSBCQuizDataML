@@ -1,5 +1,5 @@
-# HSBCQuizDataML
-Data &amp; ML code base from HSBC quiz
+# JuneQuizDataML
+Data &amp; ML code base from June quiz
 
 ## Data Preprocessing
 
